@@ -1,11 +1,11 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.0'
+version = '0.1'
 
 setup(name='collective.portlet.collectionmultiview',
       version=version,
-      description="",
+      description="A collection portlet product which supports multiple views",
       long_description=open("README.txt").read() + "\n" +
                        open(os.path.join("docs", "HISTORY.txt")).read(),
       # Get more strings from http://www.python.org/pypi?%3Aaction=list_classifiers
@@ -17,7 +17,7 @@ setup(name='collective.portlet.collectionmultiview',
       keywords='plone portlet inigo collection multi view',
       author='Izhar Firdaus',
       author_email='izhar@inigo-tech.com',
-      url='http://dev.inigo-tech.com/',
+      url='http://www.inigo-tech.com/',
       license='GPLv2+',
       packages=find_packages(exclude=['ez_setup']),
       namespace_packages=['collective', 'collective.portlet'],
