@@ -1,0 +1,130 @@
+<dl class="portlet portletCollection"
+    i18n:domain="plone"
+    tal:condition="view/results"
+    tal:define="collection_url view/collection_url;
+                plone_view context/@@plone;
+                toLocalizedTime nocall:plone_view/toLocalizedTime;
+                mtool nocall:context/portal_membership;
+                portal_discussion nocall:context/portal_discussion;
+                isDiscussionAllowedFor nocall:portal_discussion/isDiscussionAllowedFor;
+                getDiscussionFor nocall:portal_discussion/getDiscussionFor;
+                getIcon nocall:plone_view/getIcon;">
+
+    <dt class="portletHeader">
+        <span class="portletTopLeft"></span>
+        <a tal:attributes="href collection_url" tal:omit-tag="not:view/data/show_more">
+            <span tal:content="view/data/header" />
+        </a>
+        <span class="portletTopRight"></span>
+    </dt>
+
+    <tal:loop tal:repeat="obj view/results">
+    <dd class="portletItem"
+    tal:define="item_obj obj/getObject;
+               item_creator obj/Creator;
+               item_effective obj/EffectiveDate;
+               
+    talkback python:isDiscussionAllowedFor(item_obj) and getDiscussionFor(item_obj);
+    reply_count python:talkback is not False and talkback.replyCount(item_obj);
+                    oddrow repeat/obj/odd;
+                    item_icon python:getIcon(obj);"
+        tal:attributes="class python:oddrow and 'portletItem even' or 'portletItem odd'">
+            <b><a href="#"
+               class="collectionblog-title"
+               tal:attributes="href obj/getURL;">
+                <img tal:replace="structure item_icon/html_tag" />
+                <span tal:replace="obj/pretty_title_or_id">
+                 Title
+                </span>
+             </a></b>
+            <p class="collectionblog-description"
+                  tal:content="obj/Description">
+                Description
+            </p>
+            <span class="portletItemDetails"
+                  tal:condition="view/data/show_dates"
+                  tal:content="python:toLocalizedTime(obj.Date)">
+                Date
+            </span>
+            <div class="documentByLine">
+                <tal:name tal:condition="item_creator"
+                    tal:define="author python:mtool.getMemberInfo(item_creator)">
+                  <span i18n:translate="label_by_author">Posted by
+                  <a href="#"
+                     title="More information about the author"
+                     tal:attributes="href string:${context/portal_url}/Members/${item_creator}"
+                     tal:content="python:author and author['fullname'] or item_creator"
+                     i18n:name="author">
+                    Bob Dobalina
+                  </a>
+                  </span>
+                </tal:name>
+                <tal:hasEDate condition="python:item_effective !='None'">at</tal:hasEDate>
+                <span tal:replace="python:toLocalizedTime(item_effective,long_format=1)">
+                August 16, 2001 at 23:35:59
+                </span>
+                |
+                <a class="permalink" title="Link to this post and its comments.  Use this for bookmarking."
+                   i18n:domain="scrawl"
+                   i18n:translate="label_perma_link"
+                   tal:attributes="href obj/getURL">Permalink</a>
+           </div>
+
+            <div class="keyword-info"
+                 i18n:translate="label_blog_entry_categories"
+                 tal:condition="obj/Subject">
+                Filed under:
+                <tal:loop i18n:name="categories">
+                  <span tal:repeat="subject obj/Subject">
+                    <a class="item-keyword"
+                       tal:attributes="href python:'%s/search?%s' % (context.absolute_url(),  context.create_query_string(Subject=subject));"
+                       title="Limit listing to entries tagged with this category"
+                       i18n:attributes="title label_limit_listing_tagged_entries"
+                       tal:content="subject">[Feature Story]</a><tal:separator condition="not: repeat/subject/end">,</tal:separator>
+                  </span>
+                </tal:loop>
+            </div>
+
+            <div class="comment-info" 
+                 tal:condition="python:reply_count is not False">
+                <a title="Read comments on this post and weigh in yourself!"
+                   tal:attributes="href obj/getURL"
+                   i18n:translate="label_blog_entry_read_comments"
+                   i18n:attributes="title label_blog_entry_read_comments_title"
+                   >Read comments 
+                <span i18n:name="comments"
+                    ><span class="comment-count"
+                      tal:condition="reply_count"
+                      i18n:translate="label_blog_entry_read_comments_so_far"
+                      >(<tal:commentCount i18n:name="blog_entry_count" replace="reply_count">1</tal:commentCount> so far)</span></span>
+                <span i18n:name="no_comments"
+                    ><span class="comment-count"
+                           tal:condition="not:reply_count"
+                           i18n:translate="label_blog_entry_read_comments_none_yet">(None yet)</span></span></a>
+            </div>
+            <div>
+                        <span class="state-expired"
+                              tal:condition="python:context.isExpired(item_obj)"
+                         i18n:translate="time_expired">expired</span>
+            </div>
+
+    </dd>
+    </tal:loop>
+    <dd class="portletFooter" tal:condition="view/data/show_more">
+        <span class="portletBottomLeft"></span>
+        <span>
+    <a tal:attributes="href string:${collection_url}/RSS">
+	<img tal:attributes="src string:${context/portal_url}/rssportlet.png"/>
+    </a>
+    <span style="color:black">&nbsp;|&nbsp;</span>
+    <a tal:attributes="href collection_url" i18n:translate="more_url">
+             More&hellip;
+             </a>
+        </span>
+        <span class="portletBottomRight"></span>
+    </dd>
+    <dd class="portletFooter" tal:condition="not:view/data/show_more">
+     &nbsp;
+    </dd>
+
+</dl>
