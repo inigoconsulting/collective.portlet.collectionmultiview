@@ -24,7 +24,7 @@
            <img  tal:replace="structure python:tag(item_obj,scale='thumb',css_class='collectionPortlet')" 
                  src="" alt="" />
         </tal:image>
-        <p class="created" tal:content="item_created"></p>
+        <p class="created" tal:content="python:item_created[:10]"></p>
         <a href="#"
            class="tile"
            tal:attributes="href obj/getURL;">
@@ -33,6 +33,9 @@
              Title
             </span>
         </a>
+ 
+        <p tal:content="item_obj/Description">
+        </p>
     </td>
     </tal:loop>
     </tr>
