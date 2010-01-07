@@ -21,7 +21,7 @@
                     item_obj obj/getObject"
         class="collectionColumns">
         <tal:image define="tag nocall:view/tag">
-           <img  tal:replace="structure python:tag(item_obj,scale='thumb',css_class='collectionPortlet')" 
+           <img  tal:replace="structure python:tag(item_obj,scale='mini',css_class='collectionPortlet')" 
                  src="" alt="" />
         </tal:image>
         <p class="created" tal:content="python:item_created[:10]"></p>
