@@ -8,11 +8,13 @@ view adapters support.
 Writing additional views
 ========================
 
-Creating an additional view is as simple as writing a class which inherits from CollectionMultiViewBaseRenderer, and register it as a named adapter
+Creating an additional view is as simple as writing a class which inherits 
+from CollectionMultiViewBaseRenderer, and register it as a named adapter
 
 Sample code::
 
-  from collective.portlet.collectionmultiview.renderers.base import CollectionMultiViewBaseRenderer
+  from collective.portlet.collectionmultiview.renderers.base import (
+                                        CollectionMultiViewBaseRenderer)
   from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
   
   class MyCustomRenderer(CollectionMultiViewBaseRenderer):
