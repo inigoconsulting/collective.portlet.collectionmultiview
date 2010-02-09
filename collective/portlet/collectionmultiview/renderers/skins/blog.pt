@@ -42,7 +42,7 @@
                 Description
             </p>
             <div class="collectionblog-text"
-                 tal:content="structure obj/getText|nothing"
+                 tal:content="structure item_obj/getText|nothing"
             >
             </div>
             <span class="portletItemDetails"
