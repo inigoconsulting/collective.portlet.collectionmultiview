@@ -41,7 +41,6 @@
                   tal:content="obj/Description">
                 Description
             </p>
-            </div>
             <span class="portletItemDetails"
                   tal:condition="view/data/show_dates"
                   tal:content="python:toLocalizedTime(obj.Date)">
