@@ -14,4 +14,7 @@
    <adapter name="columns"
             factory=".base.ColumnRenderer" />
 
+   <adapter name="summary"
+            factory=".base.SummaryRenderer" />
+
 </configure>

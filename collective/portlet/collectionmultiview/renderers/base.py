@@ -46,3 +46,5 @@ class ColumnRenderer(CollectionMultiViewBaseRenderer):
 
     template = ViewPageTemplateFile('skins/column.pt')
 
+class SummaryRenderer(CollectionMultiViewBaseRenderer):
+    template = ViewPageTemplateFile('skins/summary.pt')
