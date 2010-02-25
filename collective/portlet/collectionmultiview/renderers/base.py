@@ -15,6 +15,7 @@ class CollectionMultiViewBaseRenderer(object):
          self.data = base.data
          self.results = base.results
          self.collection_url = base.collection_url
+         self.collection = base.collection
          self.base = base
 
      def render(self,*args,**kwargs):
