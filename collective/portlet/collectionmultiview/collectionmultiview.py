@@ -20,7 +20,7 @@ class FakeRenderer(object):
     implements(ICollectionMultiViewBaseRenderer)
     def __init__(self):
         for attr in ['request','context','data','results',
-                     'collection_url']:
+                     'collection_url','collection']:
             setattr(self,attr,None)
 
 def RendererVocabulary(context):
