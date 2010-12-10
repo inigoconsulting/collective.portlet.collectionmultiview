@@ -1,0 +1,18 @@
+Roadmap for 2.0
+=================
+
+
+Hide unnecessary fields from add/edit forms
+--------------------------------------------
+
+There are some fields from collectionportlet which are irrelevant
+to collectionmultiview.
+
+Dec 10, 2010 - izhar
+ * omitted the fields
+
+Renderers which are also collection's browser view
+---------------------------------------------------
+
+It is common to have cases where users want collection to
+also be displayed like its portlets. Figure out a reuse mechanism here
