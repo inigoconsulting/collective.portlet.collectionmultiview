@@ -50,7 +50,6 @@ class ICollectionMultiView(collection.ICollectionPortlet):
     # some_field = schema.TextLine(title=_(u"Some field"),
     #                              description=_(u"A field to use"),
     #                              required=True)
-
     renderer = schema.Choice(title=_(u'Renderer'),
                          description=_(u"The name of the Renderer for this portlet."),
                          default='default',
@@ -107,6 +106,7 @@ class AddForm(collection.AddForm):
     """
     form_fields = form.Fields(ICollectionMultiView)
     form_fields['target_collection'].custom_widget = UberSelectionWidget
+    form_fields = form_fields.omit('random', 'show_more', 'show_dates')
 
     def create(self, data):
         return Assignment(**data)
@@ -135,4 +135,5 @@ class EditForm(collection.EditForm):
     """
     form_fields = form.Fields(ICollectionMultiView)
     form_fields['target_collection'].custom_widget = UberSelectionWidget
+    form_fields = form_fields.omit('random', 'show_more', 'show_dates')
 
