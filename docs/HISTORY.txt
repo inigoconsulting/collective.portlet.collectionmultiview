@@ -1,6 +1,13 @@
 Changelog
 =========
 
+1.0 (unreleased)
+----------------
+
+* fix permission used for portlet
+  [vangheem]
+  
+
 0.1 (2009-12-31)
 ----------------
 
