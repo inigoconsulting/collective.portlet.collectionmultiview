@@ -6,6 +6,7 @@
     i18n_domain="collective.portlet.collectionmultiview">
 
     <five:registerPackage package="." initialize=".initialize" />
+    <include package="plone.portlet.collection" />
 
     <genericsetup:registerProfile
        name="default"
@@ -27,7 +28,7 @@
          interface=".collectionmultiview.ICollectionMultiView"
          assignment=".collectionmultiview.Assignment"
          view_permission="zope2.View"
-         edit_permission="cmf.ManagePortal"
+         edit_permission="plone.portlet.collection.AddCollectionPortlet"
          renderer=".collectionmultiview.Renderer"
          addview=".collectionmultiview.AddForm"
          editview=".collectionmultiview.EditForm"
