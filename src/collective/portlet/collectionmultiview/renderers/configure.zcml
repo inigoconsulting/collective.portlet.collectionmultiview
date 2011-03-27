@@ -8,9 +8,6 @@
    <adapter name="blog"
             factory=".base.BlogRenderer" />
 
-   <adapter name="gallery" 
-            factory=".base.GalleryRenderer" />
-
    <adapter name="columns"
             factory=".base.ColumnRenderer" />
 
