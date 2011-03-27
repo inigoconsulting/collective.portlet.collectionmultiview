@@ -27,8 +27,9 @@ def RendererVocabulary(context):
     fake = FakeRenderer()
     adapters = getAdapters((fake, ),ICollectionMultiViewRenderer)
     terms = []
-    for name,adapted in adapters:
-        terms.append(SimpleVocabulary.createTerm(name))
+    for name, adapted in adapters:
+        title = getattr(adapted, '__name__', name)
+        terms.append(SimpleVocabulary.createTerm(title))
     return SimpleVocabulary(terms)
 
 alsoProvides(RendererVocabulary, IVocabularyFactory)

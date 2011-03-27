@@ -13,13 +13,13 @@ from CollectionMultiViewBaseRenderer, and register it as a named adapter
 
 Sample code::
 
-  from collective.portlet.collectionmultiview.renderers.base import (
+    from collective.portlet.collectionmultiview.renderers.base import (
                                         CollectionMultiViewBaseRenderer)
-  from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+    from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
   
-  class MyCustomRenderer(CollectionMultiViewBaseRenderer):
-     
-     template = ViewPageTemplateFile('path/to/template.pt')
+    class MyCustomRenderer(CollectionMultiViewBaseRenderer):
+        __name__ = 'My Custom Renderer'
+        template = ViewPageTemplateFile('path/to/template.pt')
 
 ZCML::
 

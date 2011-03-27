@@ -33,16 +33,24 @@ class CollectionMultiViewBaseRenderer(object):
 
 class DefaultRenderer(CollectionMultiViewBaseRenderer):
 
+    __name__ = 'Default Renderer'
+
     template = ViewPageTemplateFile('skins/default.pt')
 
 class BlogRenderer(CollectionMultiViewBaseRenderer):
+
+    __name__ = 'Blog Renderer'
 
     template = ViewPageTemplateFile('skins/blog.pt')
 
 class ColumnRenderer(CollectionMultiViewBaseRenderer):
 
-   template = ViewPageTemplateFile('skins/column.pt')
+    __name__ = 'Column Renderer'
+
+    template = ViewPageTemplateFile('skins/column.pt')
 
 class SummaryRenderer(CollectionMultiViewBaseRenderer):
 
-   template = ViewPageTemplateFile('skins/summary.pt')
+    __name__ = 'Summary Renderer'
+
+    template = ViewPageTemplateFile('skins/summary.pt')
