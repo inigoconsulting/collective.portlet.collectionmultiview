@@ -78,6 +78,10 @@ class AddForm(collection.AddForm):
     description = _(u"This portlet display a listing of items from a" + 
                         " Collection, using custom views")
 
+    def create(self, data):
+        return Assignment(**data)
+
+
 class EditForm(collection.EditForm):
 
     form_fields = form.Fields(ICollectionMultiView)

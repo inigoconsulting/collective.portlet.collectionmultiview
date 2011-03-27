@@ -39,10 +39,6 @@ class BlogRenderer(CollectionMultiViewBaseRenderer):
 
     template = ViewPageTemplateFile('skins/blog.pt')
 
-class GalleryRenderer(CollectionMultiViewBaseRenderer):
-
-    template = ViewPageTemplateFile('skins/gallery.pt')
-
 class ColumnRenderer(CollectionMultiViewBaseRenderer):
 
    template = ViewPageTemplateFile('skins/column.pt')
