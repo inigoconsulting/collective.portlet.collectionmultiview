@@ -26,6 +26,7 @@ setup(name='collective.portlet.collectionmultiview',
       zip_safe=False,
       install_requires=[
           'setuptools',
+          'plone.portlet.collection>=2.0',
           # -*- Extra requirements: -*-
       ],
       entry_points="""

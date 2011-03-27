@@ -19,19 +19,19 @@ from zope.schema.vocabulary import SimpleVocabulary,SimpleTerm
 class FakeRenderer(object):
     implements(ICollectionMultiViewBaseRenderer)
     def __init__(self):
-        for attr in ['request','context','data','results',
-                     'collection_url','collection']:
-            setattr(self,attr,None)
+        for attr in ['request', 'context', 'data', 'results',
+                     'collection_url', 'collection']:
+            setattr(self, attr, None)
 
 def RendererVocabulary(context):
     fake = FakeRenderer()
-    adapters = getAdapters((fake,),ICollectionMultiViewRenderer)
+    adapters = getAdapters((fake, ),ICollectionMultiViewRenderer)
     terms = []
     for name,adapted in adapters:
         terms.append(SimpleVocabulary.createTerm(name))
     return SimpleVocabulary(terms)
 
-alsoProvides(RendererVocabulary,IVocabularyFactory)
+alsoProvides(RendererVocabulary, IVocabularyFactory)
 
 
 class ICollectionMultiView(collection.ICollectionPortlet):

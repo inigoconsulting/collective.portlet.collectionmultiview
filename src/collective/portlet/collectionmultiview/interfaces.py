@@ -5,3 +5,4 @@ class ICollectionMultiViewRenderer(Interface):
 
 class ICollectionMultiViewBaseRenderer(Interface):
     pass
+

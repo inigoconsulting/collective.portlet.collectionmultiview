@@ -6,46 +6,47 @@ from plone.memoize.instance import memoize
 from Acquisition import aq_inner
 
 class CollectionMultiViewBaseRenderer(object):
-     adapts(ICollectionMultiViewBaseRenderer)
-     implements(ICollectionMultiViewRenderer)
+    adapts(ICollectionMultiViewBaseRenderer)
+    implements(ICollectionMultiViewRenderer)
 
-     def __init__(self,base):
-         self.request = base.request
-         self.context = aq_inner(base.context)
-         self.data = base.data
-         self.results = base.results
-         self.collection_url = base.collection_url
-         self.collection = base.collection
-         self.base = base
+    def __init__(self, base):
+        self.request = base.request
+        self.context = aq_inner(base.context)
+        self.data = base.data
+        self.results = base.results
+        self.collection_url = base.collection_url
+        self.collection = base.collection
+        self.base = base
 
-     def render(self,*args,**kwargs):
-         return self.template(*args,**kwargs)
+    def render(self, *args, **kwargs):
+        return self.template(*args, **kwargs)
 
-     def tag(self,obj,scale='tile',css_class='tileImage'):
-         context = aq_inner(obj)
-         # test for leadImage and normal image
-         for fieldname in ['leadImage','image']:
-             field = context.getField(fieldname)
-             if field is not None:
+    def tag(self, obj, scale='tile', css_class='tileImage'):
+        context = aq_inner(obj)
+        # test for leadImage and normal image
+        for fieldname in ['leadImage','image']:
+            field = context.getField(fieldname)
+            if field is not None:
                 if field.get_size(context) != 0:
-                   return field.tag(context, scale=scale, css_class=css_class)
-         return ''
+                    return field.tag(context, scale=scale, css_class=css_class)
+        return ''
 
 class DefaultRenderer(CollectionMultiViewBaseRenderer):
 
-     template = ViewPageTemplateFile('skins/default.pt')
+    template = ViewPageTemplateFile('skins/default.pt')
 
 class BlogRenderer(CollectionMultiViewBaseRenderer):
 
-     template = ViewPageTemplateFile('skins/blog.pt')
+    template = ViewPageTemplateFile('skins/blog.pt')
 
 class GalleryRenderer(CollectionMultiViewBaseRenderer):
 
-     template = ViewPageTemplateFile('skins/gallery.pt')
+    template = ViewPageTemplateFile('skins/gallery.pt')
 
 class ColumnRenderer(CollectionMultiViewBaseRenderer):
 
-    template = ViewPageTemplateFile('skins/column.pt')
+   template = ViewPageTemplateFile('skins/column.pt')
 
 class SummaryRenderer(CollectionMultiViewBaseRenderer):
-    template = ViewPageTemplateFile('skins/summary.pt')
+
+   template = ViewPageTemplateFile('skins/summary.pt')
