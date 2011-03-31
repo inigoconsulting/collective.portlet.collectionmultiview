@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.1.1 (2011-03-31)
+-------------------
+
+ * bugfix release. fixed a bug with the renderer selector using title as value 
+   instead of id
 
 1.1 (2011-03-27)
 -----------------
