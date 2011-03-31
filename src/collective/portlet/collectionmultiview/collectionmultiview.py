@@ -29,7 +29,7 @@ def RendererVocabulary(context):
     terms = []
     for name, adapted in adapters:
         title = getattr(adapted, '__name__', name)
-        terms.append(SimpleVocabulary.createTerm(title))
+        terms.append(SimpleVocabulary.createTerm(name, name, title))
     return SimpleVocabulary(terms)
 
 alsoProvides(RendererVocabulary, IVocabularyFactory)
