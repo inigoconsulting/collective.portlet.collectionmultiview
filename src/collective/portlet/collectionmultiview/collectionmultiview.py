@@ -11,7 +11,13 @@ from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from collective.portlet.collectionmultiview import CollectionMultiViewMessageFactory as _
 from plone.app.form.widgets.uberselectionwidget import UberSelectionWidget
 from interfaces import ICollectionMultiViewBaseRenderer,ICollectionMultiViewRenderer
-from zope.app.schema.vocabulary import IVocabularyFactory
+
+try:
+    from zope.schema.interfaces import IVocabularyFactory
+except ImportError:
+    # BBB Zope 2.12
+    from zope.app.schema.vocabulary import IVocabularyFactory
+
 from zope.schema.vocabulary import SimpleVocabulary,SimpleTerm
 
 # FIXME: hack to query for available adapters
