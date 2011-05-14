@@ -1,19 +1,25 @@
 Changelog
 =========
 
-1.1.1 (2011-03-31)
--------------------
+1.1.2 (2011-05-13)
+------------------
 
- * bugfix release. fixed a bug with the renderer selector using title as value 
+* Plone 4.1 compat
+  [aclark]
+
+1.1.1 (2011-03-31)
+------------------
+
+* bugfix release. fixed a bug with the renderer selector using title as value 
    instead of id
 
 1.1 (2011-03-27)
 -----------------
 
- * Plone4 compatibility
- * Renderers now may have a human readable __name__ 
- * Removed GalleryRenderer as it is broken anyway
- * Hide unnecessary fields from the base Plone collection portlet.
+* Plone4 compatibility
+* Renderers now may have a human readable __name__ 
+* Removed GalleryRenderer as it is broken anyway
+* Hide unnecessary fields from the base Plone collection portlet.
 
 1.0 (unreleased)
 ----------------
