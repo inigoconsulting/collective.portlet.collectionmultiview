@@ -1,6 +1,7 @@
 from zope.interface import implements,alsoProvides
 from zope.component import adapts,getAdapter,getAdapters
 
+from plone.portlets.interfaces import IPortletDataProvider
 from plone.app.portlets.portlets import base
 from plone.portlet.collection import collection
 
@@ -11,6 +12,8 @@ from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from collective.portlet.collectionmultiview import CollectionMultiViewMessageFactory as _
 from plone.app.form.widgets.uberselectionwidget import UberSelectionWidget
 from interfaces import ICollectionMultiViewBaseRenderer,ICollectionMultiViewRenderer
+from plone.app.vocabularies.catalog import SearchableTextSourceBinder
+
 
 try:
     from zope.schema.interfaces import IVocabularyFactory
@@ -41,7 +44,48 @@ def RendererVocabulary(context):
 alsoProvides(RendererVocabulary, IVocabularyFactory)
 
 
-class ICollectionMultiView(collection.ICollectionPortlet):
+class ICollectionMultiView(IPortletDataProvider):
+
+    header = schema.TextLine(
+        title=_(u"Portlet header"),
+        description=_(u"Title of the rendered portlet"),
+        required=True)
+
+    target_collection = schema.Choice(
+        title=_(u"Target collection"),
+        description=_(u"Find the collection which provides the items to list"),
+        required=True,
+        source=SearchableTextSourceBinder(
+            {'portal_type': 'Topic'},
+            default_query='path:'))
+
+    limit = schema.Int(
+        title=_(u"Limit"),
+        description=_(u"Specify the maximum number of items to show in the "
+                      u"portlet. Leave this blank to show all items."),
+        required=False)
+
+    random = schema.Bool(
+        title=_(u"Select random items"),
+        description=_(u"If enabled, items will be selected randomly from the "
+                      u"collection, rather than based on its sort order."),
+        required=True,
+        default=False)
+
+    show_more = schema.Bool(
+        title=_(u"Show more... link"),
+        description=_(u"If enabled, a more... link will appear in the footer "
+                      u"of the portlet, linking to the underlying "
+                      u"Collection."),
+        required=True,
+        default=True)
+
+    show_dates = schema.Bool(
+        title=_(u"Show dates"),
+        description=_(u"If enabled, effective dates will be shown underneath "
+                      u"the items listed."),
+        required=True,
+        default=False)
 
     renderer = schema.Choice(title=_(u'Renderer'),
                          description=_(u"The name of the Renderer for this portlet."),
@@ -50,16 +94,35 @@ class ICollectionMultiView(collection.ICollectionPortlet):
                          vocabulary='collective.portlet.collectionmultiview.RendererVocabulary')
 
 
-class Assignment(collection.Assignment):
+class Assignment(base.Assignment):
 
     implements(ICollectionMultiView)
+
+    header = u""
+    target_collection = None
+    limit = None
+    random = False
+    show_more = True
+    show_dates = False
 
     def __init__(self, header=u"", target_collection=None, limit=None,
                  random=False, show_more=True, show_dates=False, 
                  renderer='default'):
-        super(Assignment,self).__init__(header, target_collection, limit, 
-                                        random, show_more, show_dates)
+        self.header = header
+        self.target_collection = target_collection
+        self.limit = limit
+        self.random = random
+        self.show_more = show_more
+        self.show_dates = show_dates
         self.renderer = renderer
+
+    @property
+    def title(self):
+        """This property is used to give the title of the portlet in the
+        "manage portlets" screen. Here, we use the title that the user gave.
+        """
+        return self.header
+
 
 
 class Renderer(collection.Renderer):
