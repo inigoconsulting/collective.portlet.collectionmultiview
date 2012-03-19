@@ -7,12 +7,18 @@ from Acquisition import aq_inner
 
 from zope import schema
 from collective.portlet.collectionmultiview import CollectionMultiViewMessageFactory as _
-
+try:
+    from plone.app.discussion.interfaces import IConversation, IDiscussionLayer
+    HAS_PAD = True
+except ImportError:
+    HAS_PAD = False
 
 class CollectionMultiViewBaseRenderer(object):
 #    adapts(ICollectionMultiViewBaseRenderer)
     adapts(None)
     implements(ICollectionMultiViewRenderer)
+
+    available = True
 
     def __init__(self, base):
         if base is None:
@@ -88,3 +94,18 @@ class SummaryRenderer(CollectionMultiViewBaseRenderer):
     __name__ = 'Summary Renderer'
 
     template = ViewPageTemplateFile('skins/summary.pt')
+
+    def comment_count(self, obj):
+        """
+        Returns the number of comments for the given object or False if
+        comments are disabled.
+        """
+        
+        if HAS_PAD:
+            if IDiscussionLayer.providedBy(self.request):
+                conversation = IConversation(obj)
+                return conversation.enabled() and len(conversation)
+        if self.portal_discussion.isDiscussionAllowedFor(obj):
+            discussion = self.portal_discussion.getDiscussionFor(obj)
+            return discussion.replyCount(obj)
+        return False

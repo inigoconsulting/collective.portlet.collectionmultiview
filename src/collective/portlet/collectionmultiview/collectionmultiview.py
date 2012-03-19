@@ -85,14 +85,11 @@ class Assignment(base.Assignment):
         """
         return self.header
 
-#    def __getattr__(self, key):
-#        try:
-#            return super(Assignment, self).__getattr__(key)
-#        except AttributeError:
-#            return None
 
 class Renderer(collection.Renderer):
     implements(ICollectionMultiViewBaseRenderer)
+
+    available = True
 
     @property
     def render(self):
