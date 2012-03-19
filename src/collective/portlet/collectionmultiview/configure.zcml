@@ -34,7 +34,7 @@
          editview=".collectionmultiview.EditForm"
          />
 
-     <utility component=".collectionmultiview.RendererVocabulary"
+     <utility component=".vocabulary.RendererVocabulary"
               provides="zope.schema.interfaces.IVocabularyFactory"
               name="collective.portlet.collectionmultiview.RendererVocabulary"/>
 

@@ -3,7 +3,9 @@
     tal:define="collection_url view/collection_url;
                 plone_view context/@@plone;
                 toLocalizedTime nocall:plone_view/toLocalizedTime;
-                getIcon nocall:plone_view/getIcon;">
+                viewActions here/portal_properties/site_properties/typesUseViewActionInListings|python:();
+                getIcon nocall:plone_view/getIcon;"
+    tal:attributes="class string:portlet portletCollection ${view/css_class}">
 
     <dt class="portletHeader">
         <span class="portletTopLeft"></span>
@@ -12,15 +14,19 @@
         </a>
         <span class="portletTopRight"></span>
     </dt>
-    
-    <tal:loop tal:repeat="obj view/results">
+
+    <tal:events tal:repeat="obj view/results">
     <dd class="portletItem"
         tal:define="oddrow repeat/obj/odd;
+                    useView    python:obj.portal_type in viewActions;
+                    itemUrl    python:useView and obj.getURL() + '/view' or obj.getURL();
                     item_icon python:getIcon(obj);"
+
         tal:attributes="class python:oddrow and 'portletItem even' or 'portletItem odd'">
         <a href="#"
            class="tile"
-           tal:attributes="href obj/getURL;">
+           tal:attributes="href itemUrl;
+                           title obj/Description">
             <img tal:replace="structure item_icon/html_tag" />
             <span tal:replace="obj/pretty_title_or_id">
              Title
@@ -32,14 +38,14 @@
             </span>
         </a>
     </dd>
-    </tal:loop>
-    
-    <dd class="portletFooter" tal:condition="view/data/show_more">
+    </tal:events>
+
+    <dd class="portletFooter">
         <span class="portletBottomLeft"></span>
-        <span>
+        <span tal:condition="view/data/show_more">
         <a tal:attributes="href collection_url" i18n:translate="more_url">
-             More&hellip;
-             </a>
+            More&hellip;
+        </a>
         </span>
         <span class="portletBottomRight"></span>
     </dd>

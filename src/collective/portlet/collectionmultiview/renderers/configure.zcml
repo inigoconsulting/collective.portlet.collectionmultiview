@@ -3,15 +3,15 @@
     i18n_domain="collective.portlet.collectionmultiview">
 
    <adapter name="default"
-            factory=".base.DefaultRenderer" />
+            factory=".default.DefaultRenderer" />
 
    <adapter name="blog"
-            factory=".base.BlogRenderer" />
+            factory=".blog.BlogRenderer" />
 
    <adapter name="columns"
-            factory=".base.ColumnRenderer" />
+            factory=".column.ColumnRenderer" />
 
    <adapter name="summary"
-            factory=".base.SummaryRenderer" />
+            factory=".summary.SummaryRenderer" />
 
 </configure>

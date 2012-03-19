@@ -9,29 +9,11 @@ from zope import schema
 from zope.formlib import form
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
-from collective.portlet.collectionmultiview import CollectionMultiViewMessageFactory as _
+from collective.portlet.collectionmultiview.i18n import messageFactory as _
 from plone.app.form.widgets.uberselectionwidget import UberSelectionWidget
-from interfaces import ICollectionMultiViewBaseRenderer,ICollectionMultiViewRenderer
+from interfaces import ICollectionMultiViewBaseRenderer, ICollectionMultiViewRenderer
 from plone.app.vocabularies.catalog import SearchableTextSourceBinder
 from collective.portlet.collectionmultiview.widget import RendererSelectWidget
-
-try:
-    from zope.schema.interfaces import IVocabularyFactory
-except ImportError:
-    # BBB Zope 2.12
-    from zope.app.schema.vocabulary import IVocabularyFactory
-
-from zope.schema.vocabulary import SimpleVocabulary,SimpleTerm
-
-def RendererVocabulary(context):
-    adapters = getAdapters((None, ),ICollectionMultiViewRenderer)
-    terms = []
-    for name, adapted in adapters:
-        title = getattr(adapted, '__name__', name)
-        terms.append(SimpleVocabulary.createTerm(name, name, title))
-    return SimpleVocabulary(terms)
-
-alsoProvides(RendererVocabulary, IVocabularyFactory)
 
 
 class ICollectionMultiView(IPortletDataProvider):
@@ -71,7 +53,6 @@ class Assignment(base.Assignment):
     limit = None
 
     def __init__(self, header=u"", target_collection=None, limit=None,
-                 random=False, show_more=True, show_dates=False, 
                  renderer='default'):
         self.header = header
         self.target_collection = target_collection
@@ -89,8 +70,6 @@ class Assignment(base.Assignment):
 class Renderer(collection.Renderer):
     implements(ICollectionMultiViewBaseRenderer)
 
-    available = True
-
     @property
     def render(self):
         renderer = getattr(self.data,'renderer',None)
@@ -100,38 +79,27 @@ class Renderer(collection.Renderer):
         return getAdapter(self, ICollectionMultiViewRenderer, renderer).render
 
 
-_unique_extended = {}
+def get_extended_schema(request, renderer=u'default'):
+    if request.get('form.renderer'):
+        renderer = request.get('form.renderer')
 
-class FieldsMixin(object):
-
-    def get_schema(self, renderer=u'default'):
-
-        if self.request.get('form.renderer'):
-            renderer = self.request.get('form.renderer')
-
-        adapter = getAdapter(None, ICollectionMultiViewRenderer, renderer)
-        schema = getattr(adapter, 'schema', None)
-        iface = ICollectionMultiView
-        if schema is not None:
-            extended = _unique_extended.get((iface, schema), None)
-            if extended is None:
-                class IExtendedSchema(iface, schema): pass
-                _unique_extended[(iface, schema)] = IExtendedSchema
-                extended = IExtendedSchema
-            iface = extended
-        return iface
-
+    adapter = getAdapter(None, ICollectionMultiViewRenderer, renderer)
+    schema = getattr(adapter, 'schema', None)
+    iface = ICollectionMultiView
+    if schema is not None:
+        class IExtendedSchema(iface, schema): pass
+        iface = IExtendedSchema
+    return iface
         
-class AddForm(FieldsMixin, collection.AddForm):
+class AddForm(base.AddForm):
 
     @property
     def form_fields(self):
-        schema = self.get_schema()
+        schema = get_extended_schema(self.request)
         fields = form.Fields(schema)
         fields['target_collection'].custom_widget = UberSelectionWidget
         fields['renderer'].custom_widget = RendererSelectWidget
         return fields
-
 
     label = _(u'Add CollectionMultiView portlet')
     description = _(u"This portlet display a listing of items from a" + 
@@ -143,6 +111,10 @@ class AddForm(FieldsMixin, collection.AddForm):
 
 
 class ExtendedDataAdapter(object):
+    """ 
+        hack to lie to form.applyChanges that this object have
+        all attributes
+    """
 
     def __init__(self, context):
         self.context = context
@@ -159,18 +131,17 @@ class ExtendedDataAdapter(object):
         else:
             return super(ExtendedDataAdapter, self).__getattr__(key)
 
-class EditForm(FieldsMixin, collection.EditForm):
+class EditForm(base.EditForm):
 
     @property
     def form_fields(self):
-        schema = self.get_schema(self.context.renderer)
+        schema = get_extended_schema(self.request, self.context.renderer)
         fields = form.Fields(schema)
         fields['target_collection'].custom_widget = UberSelectionWidget
         fields['renderer'].custom_widget = RendererSelectWidget
         if getattr(self, 'adapters', None) is not None:
             self.adapters[schema] = ExtendedDataAdapter(self.context)
         return fields
-
 
     label = _(u'Edit CollectionMultiView portlet')
     description = _(u"This portlet display a listing of items from a" +

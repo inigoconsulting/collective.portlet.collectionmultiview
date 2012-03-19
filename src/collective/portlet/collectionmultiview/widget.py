@@ -22,10 +22,7 @@ class RendererSelectWidget(SimpleInputWidget):
 
     def script(self):
         return '''
-
-        $(document).ready(function () {
-            $('[name="%(name)s"]').change(function () {
-                $('[name="%(name)s.reload"]').click();
-            })
-        })
+        var reloadRenderer = function () {
+            $('[name="%(name)s.reload"]').click();
+        }
         ''' % {'name':self.name}

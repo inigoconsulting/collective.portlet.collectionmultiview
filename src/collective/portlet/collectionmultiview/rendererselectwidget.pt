@@ -6,7 +6,7 @@
 
    <script tal:content="structure options/script"></script>
    <div class="rendererselectwidget">
-      <select tal:attributes="name options/name">
+      <select tal:attributes="name options/name" onChange="reloadRenderer()">
          <option tal:repeat="choice options/field/vocabulary" 
               tal:attributes="value choice/token;
                               selected python:choice.token == options['value']"

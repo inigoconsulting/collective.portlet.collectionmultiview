@@ -6,8 +6,6 @@
                 toLocalizedTime nocall:plone_view/toLocalizedTime;
                 mtool nocall:context/portal_membership;
                 portal_discussion nocall:context/portal_discussion;
-                isDiscussionAllowedFor nocall:portal_discussion/isDiscussionAllowedFor;
-                getDiscussionFor nocall:portal_discussion/getDiscussionFor;
                 getIcon nocall:plone_view/getIcon;">
 
     <dt class="portletHeader">
@@ -23,9 +21,7 @@
     tal:define="item_obj obj/getObject;
                item_creator obj/Creator;
                item_effective obj/EffectiveDate;
-               
-    talkback python:isDiscussionAllowedFor(item_obj) and getDiscussionFor(item_obj);
-    reply_count python:talkback is not False and talkback.replyCount(item_obj);
+               reply_count python:view.comment_count(item_obj);
                     oddrow repeat/obj/odd;
                     item_icon python:getIcon(obj);"
         tal:attributes="class python:oddrow and 'portletItem even' or 'portletItem odd'">
