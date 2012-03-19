@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.2 (2012-03-19)
+------------------
+
+* Added mechanism for additional views to extend the portlet schema [kagesenshi]
+
 1.1.2 (2011-06-06)
 ------------------
 

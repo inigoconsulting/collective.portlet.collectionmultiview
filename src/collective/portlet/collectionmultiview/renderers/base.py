@@ -1,15 +1,24 @@
 from collective.portlet.collectionmultiview.interfaces import ICollectionMultiViewBaseRenderer,ICollectionMultiViewRenderer
 from zope.component import adapts
-from zope.interface import implements
+from zope.interface import implements, Interface
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from plone.memoize.instance import memoize
 from Acquisition import aq_inner
 
+from zope import schema
+from collective.portlet.collectionmultiview import CollectionMultiViewMessageFactory as _
+
+
 class CollectionMultiViewBaseRenderer(object):
-    adapts(ICollectionMultiViewBaseRenderer)
+#    adapts(ICollectionMultiViewBaseRenderer)
+    adapts(None)
     implements(ICollectionMultiViewRenderer)
 
     def __init__(self, base):
+        if base is None:
+            """ hack to allow us to query for all adapters """
+            return
+
         self.request = base.request
         self.context = aq_inner(base.context)
         self.data = base.data
@@ -31,10 +40,35 @@ class CollectionMultiViewBaseRenderer(object):
                     return field.tag(context, scale=scale, css_class=css_class)
         return ''
 
+class IDefaultSchema(Interface):
+    random = schema.Bool(
+        title=_(u"Select random items"),
+        description=_(u"If enabled, items will be selected randomly from the "
+                      u"collection, rather than based on its sort order."),
+        required=True,
+        default=False)
+
+    show_more = schema.Bool(
+        title=_(u"Show more... link"),
+        description=_(u"If enabled, a more... link will appear in the footer "
+                      u"of the portlet, linking to the underlying "
+                      u"Collection."),
+        required=True,
+        default=True)
+
+    show_dates = schema.Bool(
+        title=_(u"Show dates"),
+        description=_(u"If enabled, effective dates will be shown underneath "
+                      u"the items listed."),
+        required=True,
+        default=False)
+
+
+
 class DefaultRenderer(CollectionMultiViewBaseRenderer):
 
     __name__ = 'Default Renderer'
-
+    schema = IDefaultSchema
     template = ViewPageTemplateFile('skins/default.pt')
 
 class BlogRenderer(CollectionMultiViewBaseRenderer):

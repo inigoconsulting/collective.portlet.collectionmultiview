@@ -13,7 +13,7 @@ from collective.portlet.collectionmultiview import CollectionMultiViewMessageFac
 from plone.app.form.widgets.uberselectionwidget import UberSelectionWidget
 from interfaces import ICollectionMultiViewBaseRenderer,ICollectionMultiViewRenderer
 from plone.app.vocabularies.catalog import SearchableTextSourceBinder
-
+from collective.portlet.collectionmultiview.widget import RendererSelectWidget
 
 try:
     from zope.schema.interfaces import IVocabularyFactory
@@ -23,18 +23,8 @@ except ImportError:
 
 from zope.schema.vocabulary import SimpleVocabulary,SimpleTerm
 
-# FIXME: hack to query for available adapters
-# no idea on what the better way to do this
-class FakeRenderer(object):
-    implements(ICollectionMultiViewBaseRenderer)
-    def __init__(self):
-        for attr in ['request', 'context', 'data', 'results',
-                     'collection_url', 'collection']:
-            setattr(self, attr, None)
-
 def RendererVocabulary(context):
-    fake = FakeRenderer()
-    adapters = getAdapters((fake, ),ICollectionMultiViewRenderer)
+    adapters = getAdapters((None, ),ICollectionMultiViewRenderer)
     terms = []
     for name, adapted in adapters:
         title = getattr(adapted, '__name__', name)
@@ -65,28 +55,6 @@ class ICollectionMultiView(IPortletDataProvider):
                       u"portlet. Leave this blank to show all items."),
         required=False)
 
-    random = schema.Bool(
-        title=_(u"Select random items"),
-        description=_(u"If enabled, items will be selected randomly from the "
-                      u"collection, rather than based on its sort order."),
-        required=True,
-        default=False)
-
-    show_more = schema.Bool(
-        title=_(u"Show more... link"),
-        description=_(u"If enabled, a more... link will appear in the footer "
-                      u"of the portlet, linking to the underlying "
-                      u"Collection."),
-        required=True,
-        default=True)
-
-    show_dates = schema.Bool(
-        title=_(u"Show dates"),
-        description=_(u"If enabled, effective dates will be shown underneath "
-                      u"the items listed."),
-        required=True,
-        default=False)
-
     renderer = schema.Choice(title=_(u'Renderer'),
                          description=_(u"The name of the Renderer for this portlet."),
                          default='default',
@@ -101,9 +69,6 @@ class Assignment(base.Assignment):
     header = u""
     target_collection = None
     limit = None
-    random = False
-    show_more = True
-    show_dates = False
 
     def __init__(self, header=u"", target_collection=None, limit=None,
                  random=False, show_more=True, show_dates=False, 
@@ -111,9 +76,6 @@ class Assignment(base.Assignment):
         self.header = header
         self.target_collection = target_collection
         self.limit = limit
-        self.random = random
-        self.show_more = show_more
-        self.show_dates = show_dates
         self.renderer = renderer
 
     @property
@@ -123,7 +85,11 @@ class Assignment(base.Assignment):
         """
         return self.header
 
-
+#    def __getattr__(self, key):
+#        try:
+#            return super(Assignment, self).__getattr__(key)
+#        except AttributeError:
+#            return None
 
 class Renderer(collection.Renderer):
     implements(ICollectionMultiViewBaseRenderer)
@@ -137,12 +103,38 @@ class Renderer(collection.Renderer):
         return getAdapter(self, ICollectionMultiViewRenderer, renderer).render
 
 
-class AddForm(collection.AddForm):
+_unique_extended = {}
 
-    form_fields = form.Fields(ICollectionMultiView)
-    form_fields['target_collection'].custom_widget = UberSelectionWidget
-    # hide these fields from collectionportlet, we dont need these here
-    form_fields = form_fields.omit('random', 'show_more', 'show_dates')
+class FieldsMixin(object):
+
+    def get_schema(self, renderer=u'default'):
+
+        if self.request.get('form.renderer'):
+            renderer = self.request.get('form.renderer')
+
+        adapter = getAdapter(None, ICollectionMultiViewRenderer, renderer)
+        schema = getattr(adapter, 'schema', None)
+        iface = ICollectionMultiView
+        if schema is not None:
+            extended = _unique_extended.get((iface, schema), None)
+            if extended is None:
+                class IExtendedSchema(iface, schema): pass
+                _unique_extended[(iface, schema)] = IExtendedSchema
+                extended = IExtendedSchema
+            iface = extended
+        return iface
+
+        
+class AddForm(FieldsMixin, collection.AddForm):
+
+    @property
+    def form_fields(self):
+        schema = self.get_schema()
+        fields = form.Fields(schema)
+        fields['target_collection'].custom_widget = UberSelectionWidget
+        fields['renderer'].custom_widget = RendererSelectWidget
+        return fields
+
 
     label = _(u'Add CollectionMultiView portlet')
     description = _(u"This portlet display a listing of items from a" + 
@@ -152,14 +144,37 @@ class AddForm(collection.AddForm):
         return Assignment(**data)
 
 
-class EditForm(collection.EditForm):
 
-    form_fields = form.Fields(ICollectionMultiView)
-    form_fields['target_collection'].custom_widget = UberSelectionWidget
-    # hide these fields from collectionportlet, we dont need these here
-    form_fields = form_fields.omit('random', 'show_more', 'show_dates')
+class ExtendedDataAdapter(object):
+
+    def __init__(self, context):
+        self.context = context
+
+    def __setattr__(self, key, value):
+        if key != 'context':
+            setattr(self.context, key, value)
+        else:
+            super(ExtendedDataAdapter, self).__setattr__(key, value)
+
+    def __getattr__(self, key):
+        if key != 'context':
+            return getattr(self.context, key, None)
+        else:
+            return super(ExtendedDataAdapter, self).__getattr__(key)
+
+class EditForm(FieldsMixin, collection.EditForm):
+
+    @property
+    def form_fields(self):
+        schema = self.get_schema(self.context.renderer)
+        fields = form.Fields(schema)
+        fields['target_collection'].custom_widget = UberSelectionWidget
+        fields['renderer'].custom_widget = RendererSelectWidget
+        if getattr(self, 'adapters', None) is not None:
+            self.adapters[schema] = ExtendedDataAdapter(self.context)
+        return fields
+
 
     label = _(u'Edit CollectionMultiView portlet')
     description = _(u"This portlet display a listing of items from a" +
                         " Collection, using custom views")
-

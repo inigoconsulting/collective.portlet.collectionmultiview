@@ -1,0 +1,20 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      tal:omit-tag="">
+
+   <script tal:content="structure options/script"></script>
+   <div class="rendererselectwidget">
+      <select tal:attributes="name options/name">
+         <option tal:repeat="choice options/field/vocabulary" 
+              tal:attributes="value choice/token;
+                              selected python:choice.token == options['value']"
+               tal:content="choice/title">
+         </option>
+      </select>
+      <input style="display:none" 
+         type="submit" value="Submit" 
+         tal:attributes="name string:${options/name}.reload"/>
+   </div>
+</html>
