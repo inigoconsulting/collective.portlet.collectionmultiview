@@ -30,3 +30,30 @@ ZCML::
          factory=".package.MyCustomRenderer"/>
 
   </configure>
+
+
+Extending portlet schema
+=========================
+
+You can also extend the portlet schema with additional fields by setting the 
+'schema' attribute in the renderer class.
+
+Sample code::
+
+    from collective.portlet.collectionmultiview.renderers.base import (
+                                        CollectionMultiViewBaseRenderer)
+    from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+
+    from zope import schema
+    from zope.interface import Interface
+
+    class IExtraFields(Interface):
+        my_extra_field = schema.TextLine(title=u'Extra field')
+
+    class MyCustomRenderer(CollectionMultiViewBaseRenderer):
+        __name__ = 'My Custom Renderer'
+        
+        schema = IExtraFields
+        template = ViewPageTemplateFile('path/to/template.pt')
+
+
