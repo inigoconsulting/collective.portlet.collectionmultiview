@@ -27,7 +27,7 @@ class IDefaultSchema(Interface):
 
 
 class DefaultRenderer(BaseRenderer):
-    """ the default renderer """
+    """ the default renderer from plone.portlet.collection """
 
     title = 'Default Renderer'
     schema = IDefaultSchema

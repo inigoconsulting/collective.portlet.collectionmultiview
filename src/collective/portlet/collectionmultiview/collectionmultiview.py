@@ -72,6 +72,10 @@ class Renderer(collection.Renderer):
 
     @property
     def render(self):
+        """
+            Find the renderer object of the selected renderer, and let it
+            masquerade as the actual portlet renderer
+        """
         renderer = getattr(self.data,'renderer',None)
         if renderer is None:
            self.data.renderer = 'default'
@@ -80,7 +84,11 @@ class Renderer(collection.Renderer):
 
 
 def get_extended_schema(request, renderer=u'default'):
+    """
+        Find the schema that should be displayed
+    """
     if request.get('form.renderer'):
+        # during refresh when changing renderer
         renderer = request.get('form.renderer')
 
     adapter = getAdapter(None, ICollectionMultiViewRenderer, renderer)

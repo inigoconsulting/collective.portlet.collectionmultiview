@@ -8,6 +8,7 @@ except ImportError:
     HAS_PAD = False
 
 class SummaryRenderer(BaseRenderer):
+    """ display as a summary listing """
 
     title = 'Summary Renderer'
     template = ViewPageTemplateFile('templates/summary.pt')

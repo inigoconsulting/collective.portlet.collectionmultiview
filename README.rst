@@ -13,12 +13,11 @@ from CollectionMultiViewBaseRenderer, and register it as a named adapter
 
 Sample code::
 
-    from collective.portlet.collectionmultiview.renderers.base import (
-                                        CollectionMultiViewBaseRenderer)
+    from collective.portlet.collectionmultiview import BaseRenderer
     from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
   
-    class MyCustomRenderer(CollectionMultiViewBaseRenderer):
-        __name__ = 'My Custom Renderer'
+    class MyCustomRenderer(BaseRenderer):
+        title = 'My Custom Renderer'
         template = ViewPageTemplateFile('path/to/template.pt')
 
 ZCML::
@@ -40,8 +39,7 @@ You can also extend the portlet schema with additional fields by setting the
 
 Sample code::
 
-    from collective.portlet.collectionmultiview.renderers.base import (
-                                        CollectionMultiViewBaseRenderer)
+    from collective.portlet.collectionmultiview import BaseRenderer
     from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
     from zope import schema
@@ -50,10 +48,8 @@ Sample code::
     class IExtraFields(Interface):
         my_extra_field = schema.TextLine(title=u'Extra field')
 
-    class MyCustomRenderer(CollectionMultiViewBaseRenderer):
+    class MyCustomRenderer(BaseRenderer):
         __name__ = 'My Custom Renderer'
         
         schema = IExtraFields
         template = ViewPageTemplateFile('path/to/template.pt')
-
-

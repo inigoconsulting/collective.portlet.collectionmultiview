@@ -8,6 +8,7 @@ except ImportError:
     HAS_PAD = False
 
 class BlogRenderer(BaseRenderer):
+    """ display as blog """
 
     title = 'Blog Renderer'
     template = ViewPageTemplateFile('templates/blog.pt')

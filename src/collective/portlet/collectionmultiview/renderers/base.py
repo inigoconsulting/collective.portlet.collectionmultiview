@@ -10,6 +10,10 @@ from collective.portlet.collectionmultiview.i18n import messageFactory as _
 
 class CollectionMultiViewBaseRenderer(object):
 #    adapts(ICollectionMultiViewBaseRenderer)
+    """
+        This is the base renderer class, it does the magic of rendering the
+        portlet
+    """
     adapts(None)
     implements(ICollectionMultiViewRenderer)
 
