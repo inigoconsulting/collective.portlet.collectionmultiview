@@ -2,7 +2,7 @@ Changelog
 =========
 
 2.0 (2012-03-20)
-------------------
+----------------
 
 * Added mechanism for additional views to extend the portlet schema [kagesenshi]
 * Massive code cleanups [kagesenshi]
