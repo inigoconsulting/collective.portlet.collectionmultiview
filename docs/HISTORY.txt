@@ -34,7 +34,7 @@ Changelog
 * Removed GalleryRenderer as it is broken anyway
 * Hide unnecessary fields from the base Plone collection portlet.
 
-1.0 (unreleased)
+1.0 (2010-12-19)
 ----------------
 
 * fix permission used for portlet
