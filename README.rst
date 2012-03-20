@@ -9,7 +9,7 @@ Writing additional views
 ========================
 
 Creating an additional view is as simple as writing a class which inherits 
-from CollectionMultiViewBaseRenderer, and register it as a named adapter
+from BaseRenderer, and register it as a named adapter
 
 Sample code::
 
@@ -49,7 +49,7 @@ Sample code::
         my_extra_field = schema.TextLine(title=u'Extra field')
 
     class MyCustomRenderer(BaseRenderer):
-        __name__ = 'My Custom Renderer'
+        title = 'My Custom Renderer'
         
         schema = IExtraFields
         template = ViewPageTemplateFile('path/to/template.pt')
