@@ -1,4 +1,6 @@
 recursive-include src/collective *
+recursive-include docs *
+include *.rst
 global-exclude *pyc
 global-exclude .project
 global-exclude .pydevproject
