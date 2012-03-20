@@ -12,6 +12,7 @@ Changelog
 
 * Added mechanism for additional views to extend the portlet schema [kagesenshi]
 * Massive code cleanups [kagesenshi]
+* changes above funded by cis-india.org
 
 1.1.2 (2011-06-06)
 ------------------
