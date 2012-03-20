@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0.1 (unreleased)
+2.0.1 (2012-03-20)
 ------------------
 
 - Fixed problem with installation of 2.0 due to missing README.rst [jone]
