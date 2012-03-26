@@ -98,6 +98,14 @@ def get_extended_schema(request, renderer=u'default'):
         class IExtendedSchema(iface, schema): pass
         iface = IExtendedSchema
     return iface
+
+def get_custom_widgets(request, renderer=u'default'):
+    #XXX should use plone.directive.form
+    if request.get('form.renderer'):
+        # during refresh when changing renderer
+        renderer = request.get('form.renderer')
+    adapter = getAdapter(None, ICollectionMultiViewRenderer, renderer)
+    return getattr(adapter, 'custom_widgets', {})
         
 class AddForm(base.AddForm):
 
@@ -107,6 +115,9 @@ class AddForm(base.AddForm):
         fields = form.Fields(schema)
         fields['target_collection'].custom_widget = UberSelectionWidget
         fields['renderer'].custom_widget = RendererSelectWidget
+        custom_widgets = get_custom_widgets(self.request)
+        for field, widget in custom_widgets.items():
+            fields[field].custom_widget = widget
         return fields
 
     label = _(u'Add CollectionMultiView portlet')
@@ -147,6 +158,9 @@ class EditForm(base.EditForm):
         fields = form.Fields(schema)
         fields['target_collection'].custom_widget = UberSelectionWidget
         fields['renderer'].custom_widget = RendererSelectWidget
+        custom_widgets = get_custom_widgets(self.request, self.context.renderer)
+        for field, widget in custom_widgets.items():
+            fields[field].custom_widget = widget
         if getattr(self, 'adapters', None) is not None:
             self.adapters[schema] = ExtendedDataAdapter(self.context)
         return fields
