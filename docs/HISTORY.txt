@@ -4,7 +4,7 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Added way to assign custom widget [kagesenshi]
 
 
 2.0.1 (2012-03-20)

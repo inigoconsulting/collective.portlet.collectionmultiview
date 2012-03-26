@@ -44,12 +44,19 @@ Sample code::
 
     from zope import schema
     from zope.interface import Interface
+    from plone.app.form.widgets.wysiwygwidget import WYSIWYGWidget
 
     class IExtraFields(Interface):
-        my_extra_field = schema.TextLine(title=u'Extra field')
+        my_extra_field = schema.Text(title=u'Extra field')
 
     class MyCustomRenderer(BaseRenderer):
         title = 'My Custom Renderer'
         
         schema = IExtraFields
         template = ViewPageTemplateFile('path/to/template.pt')
+
+
+        #optional 
+        custom_widgets = {
+            'my_extra_field': WYSIWYGWidget
+        }

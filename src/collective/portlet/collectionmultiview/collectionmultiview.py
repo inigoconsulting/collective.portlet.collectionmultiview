@@ -53,11 +53,13 @@ class Assignment(base.Assignment):
     limit = None
 
     def __init__(self, header=u"", target_collection=None, limit=None,
-                 renderer='default'):
+                 renderer='default', **kwargs):
         self.header = header
         self.target_collection = target_collection
         self.limit = limit
         self.renderer = renderer
+        for key, value in kwargs.items():
+            setattr(self, key, value)
 
     @property
     def title(self):
