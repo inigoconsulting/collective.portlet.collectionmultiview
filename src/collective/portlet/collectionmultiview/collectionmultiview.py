@@ -28,7 +28,7 @@ class ICollectionMultiView(IPortletDataProvider):
         description=_(u"Find the collection which provides the items to list"),
         required=True,
         source=SearchableTextSourceBinder(
-            {'portal_type': 'Topic'},
+            {'portal_type': ['Topic', 'Collection']},
             default_query='path:'))
 
     limit = schema.Int(
