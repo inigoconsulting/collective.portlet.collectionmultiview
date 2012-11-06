@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '2.1.0dev'
+version = '2.1.0'
 
 setup(name='collective.portlet.collectionmultiview',
       version=version,

@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.1.0 (unreleased)
+2.1.0 (2012-11-06)
 ------------------
 
 - Added support for new style collection [kagesenshi]
