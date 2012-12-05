@@ -4,7 +4,10 @@ Changelog
 2.1.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix unicode decode error for unicode chars in href title for default
+  renderer [kaerumy]. 
+
+  Supported by: Centre for Internet Society, India 
 
 
 2.1.0 (2012-11-06)
