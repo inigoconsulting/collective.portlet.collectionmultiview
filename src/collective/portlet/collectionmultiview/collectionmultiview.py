@@ -37,6 +37,12 @@ class ICollectionMultiView(IPortletDataProvider):
                       u"portlet. Leave this blank to show all items."),
         required=False)
 
+    random = schema.Bool(
+        title=_(u"Select random items"),
+        description=_(u"If enabled, items will be selected randomly from the "
+                      u"collection, rather than based on its sort order."),
+        default=False)
+
     renderer = schema.Choice(title=_(u'Renderer'),
                          description=_(u"The name of the Renderer for this portlet."),
                          default='default',
@@ -51,10 +57,12 @@ class Assignment(base.Assignment):
     header = u""
     target_collection = None
     limit = None
+    random = False
 
     def __init__(self, header=u"", target_collection=None, limit=None,
-                 renderer='default', **kwargs):
+                 random=False, renderer='default', **kwargs):
         self.header = header
+        self.random = random
         self.target_collection = target_collection
         self.limit = limit
         self.renderer = renderer
