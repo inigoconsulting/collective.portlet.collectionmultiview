@@ -72,18 +72,26 @@ class Assignment(base.Assignment):
 class Renderer(collection.Renderer):
     implements(ICollectionMultiViewBaseRenderer)
 
+    def get_renderer(self):
+        renderer = getattr(self.data,'renderer',None)
+        if renderer is None:
+           self.data.renderer = 'default'
+           renderer = 'default'
+        return getAdapter(self, ICollectionMultiViewRenderer, renderer)
+
+
     @property
     def render(self):
         """
             Find the renderer object of the selected renderer, and let it
             masquerade as the actual portlet renderer
         """
-        renderer = getattr(self.data,'renderer',None)
-        if renderer is None:
-           self.data.renderer = 'default'
-           renderer = 'default'
-        return getAdapter(self, ICollectionMultiViewRenderer, renderer).render
+        return self.get_renderer().render
 
+    @property
+    def available(self):
+        renderer = self.get_renderer()
+        return getattr(renderer, 'available', True)
 
 def get_extended_schema(request, renderer=u'default'):
     """
