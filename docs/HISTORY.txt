@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.1.3 (unreleased)
+2.1.3 (2013-01-03)
 ------------------
 
 - 'random' field should be in primary schema rather than on default 
