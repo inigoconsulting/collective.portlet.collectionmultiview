@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.1.5 (unreleased)
+2.1.5 (2013-01-24)
 ------------------
 
 - returning None on attribute not found introduced a major bug when editing,
