@@ -76,11 +76,6 @@ class Assignment(base.Assignment):
         """
         return self.header
 
-    def __getattr__(self, key):
-        if key not in self.__dict__:
-            return None
-        return self.__dict__[key]
-
 
 class Renderer(collection.Renderer):
     implements(ICollectionMultiViewBaseRenderer)
@@ -91,7 +86,6 @@ class Renderer(collection.Renderer):
            self.data.renderer = 'default'
            renderer = 'default'
         return getAdapter(self, ICollectionMultiViewRenderer, renderer)
-
 
     @property
     def render(self):
