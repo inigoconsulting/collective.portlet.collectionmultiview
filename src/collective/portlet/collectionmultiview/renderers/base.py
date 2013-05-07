@@ -1,12 +1,10 @@
-from collective.portlet.collectionmultiview.interfaces import ICollectionMultiViewBaseRenderer,ICollectionMultiViewRenderer
+from collective.portlet.collectionmultiview.interfaces import (
+        ICollectionMultiViewRenderer
+)
 from zope.component import adapts
-from zope.interface import implements, Interface
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
-from plone.memoize.instance import memoize
+from zope.interface import implements
 from Acquisition import aq_inner
 
-from zope import schema
-from collective.portlet.collectionmultiview.i18n import messageFactory as _
 
 class CollectionMultiViewBaseRenderer(object):
 #    adapts(ICollectionMultiViewBaseRenderer)
@@ -37,7 +35,7 @@ class CollectionMultiViewBaseRenderer(object):
     def tag(self, obj, scale='tile', css_class='tileImage'):
         context = aq_inner(obj)
         # test for leadImage and normal image
-        for fieldname in ['leadImage','image']:
+        for fieldname in ['leadImage', 'image']:
             field = context.getField(fieldname)
             if field is not None:
                 if field.get_size(context) != 0:

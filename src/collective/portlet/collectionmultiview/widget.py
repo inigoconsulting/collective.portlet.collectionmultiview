@@ -1,11 +1,6 @@
 from zope.app.form.browser.widget import SimpleInputWidget
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from zope.formlib import form
-from zope.formlib.widget import BrowserWidget, InputWidget
-from zope.component import getAdapter
-from collective.portlet.collectionmultiview.interfaces import (
-    ICollectionMultiViewRenderer
-)
+
 
 class RendererSelectWidget(SimpleInputWidget):
 
@@ -25,4 +20,4 @@ class RendererSelectWidget(SimpleInputWidget):
         var reloadRenderer = function () {
             $('[name="%(name)s.reload"]').click();
         }
-        ''' % {'name':self.name}
+        ''' % {'name': self.name}

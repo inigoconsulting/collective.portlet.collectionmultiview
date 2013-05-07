@@ -1,4 +1,4 @@
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from collective.portlet.collectionmultiview import BaseRenderer
 
 try:
@@ -6,6 +6,7 @@ try:
     HAS_PAD = True
 except ImportError:
     HAS_PAD = False
+
 
 class BlogRenderer(BaseRenderer):
     """ display as blog """
@@ -27,4 +28,3 @@ class BlogRenderer(BaseRenderer):
             discussion = self.context.portal_discussion.getDiscussionFor(obj)
             return discussion.replyCount(obj)
         return False
-

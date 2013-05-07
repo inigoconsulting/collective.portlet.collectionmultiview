@@ -22,8 +22,9 @@ class TestPortlet(TestCase):
         portlet = getUtility(
             IPortletType,
             name='collective.portlet.collectionmultiview.CollectionMultiView')
-        self.assertEquals(portlet.addview,
-                          'collective.portlet.collectionmultiview.CollectionMultiView')
+        self.assertEquals(
+            portlet.addview,
+            'collective.portlet.collectionmultiview.CollectionMultiView')
 
     def test_interfaces(self):
         # TODO: Pass any keyword arguments to the Assignment constructor

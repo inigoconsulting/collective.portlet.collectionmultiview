@@ -1,10 +1,11 @@
 Changelog
 =========
 
-2.1.1 (unreleased)
-------------------
+2.2dev (unreleased)
+-------------------
 
-- Nothing changed yet.
+- Plone 4.3 compatibility. PEP 8 cleanup.
+  [thet]
 
 
 2.1.0 (2012-11-06)

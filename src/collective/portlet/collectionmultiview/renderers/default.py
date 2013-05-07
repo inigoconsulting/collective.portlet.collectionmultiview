@@ -1,9 +1,10 @@
 from collective.portlet.collectionmultiview import BaseRenderer
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 
 from zope.interface import Interface
 from zope import schema
 from collective.portlet.collectionmultiview.i18n import messageFactory as _
+
 
 class IDefaultSchema(Interface):
     random = schema.Bool(

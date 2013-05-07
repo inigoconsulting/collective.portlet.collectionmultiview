@@ -1,16 +1,15 @@
-from zope.interface import implements,alsoProvides
+from zope.interface import alsoProvides
 from collective.portlet.collectionmultiview.interfaces import (
     ICollectionMultiViewRenderer
 )
 from zope.component import getAdapters
-from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
+from zope.schema.vocabulary import SimpleVocabulary
 
 try:
     from zope.schema.interfaces import IVocabularyFactory
 except ImportError:
     # BBB Zope 2.12
     from zope.app.schema.vocabulary import IVocabularyFactory
-
 
 
 def RendererVocabulary(context):
@@ -22,7 +21,7 @@ def RendererVocabulary(context):
     for name, adapted in adapters:
         if hasattr(adapted, 'title'):
             title = adapted.title
-        elif hasattr(adapted, '__name__'): # backward compatibility with 1.x 
+        elif hasattr(adapted, '__name__'):  # backward compatibility with 1.x
             title = adapted.__name__
         else:
             title = name

@@ -1,5 +1,5 @@
-from zope.interface import implements,alsoProvides
-from zope.component import adapts,getAdapter,getAdapters
+from zope.interface import implements
+from zope.component import getAdapter
 
 from plone.portlets.interfaces import IPortletDataProvider
 from plone.app.portlets.portlets import base
@@ -7,11 +7,13 @@ from plone.portlet.collection import collection
 
 from zope import schema
 from zope.formlib import form
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
 from collective.portlet.collectionmultiview.i18n import messageFactory as _
 from plone.app.form.widgets.uberselectionwidget import UberSelectionWidget
-from interfaces import ICollectionMultiViewBaseRenderer, ICollectionMultiViewRenderer
+from collective.portlet.collectionmultiview.interfaces import (
+    ICollectionMultiViewBaseRenderer,
+    ICollectionMultiViewRenderer
+)
 from plone.app.vocabularies.catalog import SearchableTextSourceBinder
 from collective.portlet.collectionmultiview.widget import RendererSelectWidget
 
@@ -37,11 +39,12 @@ class ICollectionMultiView(IPortletDataProvider):
                       u"portlet. Leave this blank to show all items."),
         required=False)
 
-    renderer = schema.Choice(title=_(u'Renderer'),
-                         description=_(u"The name of the Renderer for this portlet."),
-                         default='default',
-                         required=True,
-                         vocabulary='collective.portlet.collectionmultiview.RendererVocabulary')
+    renderer = schema.Choice(
+        title=_(u'Renderer'),
+        description=_(u"The name of the Renderer for this portlet."),
+        default='default',
+        required=True,
+        vocabulary='collective.portlet.collectionmultiview.RendererVocabulary')
 
 
 class Assignment(base.Assignment):
@@ -78,10 +81,10 @@ class Renderer(collection.Renderer):
             Find the renderer object of the selected renderer, and let it
             masquerade as the actual portlet renderer
         """
-        renderer = getattr(self.data,'renderer',None)
+        renderer = getattr(self.data, 'renderer', None)
         if renderer is None:
-           self.data.renderer = 'default'
-           renderer = 'default'
+            self.data.renderer = 'default'
+            renderer = 'default'
         return getAdapter(self, ICollectionMultiViewRenderer, renderer).render
 
 
@@ -97,9 +100,11 @@ def get_extended_schema(request, renderer=u'default'):
     schema = getattr(adapter, 'schema', None)
     iface = ICollectionMultiView
     if schema is not None:
-        class IExtendedSchema(iface, schema): pass
+        class IExtendedSchema(iface, schema):
+            pass
         iface = IExtendedSchema
     return iface
+
 
 def get_custom_widgets(request, renderer=u'default'):
     #XXX should use plone.directive.form
@@ -108,7 +113,8 @@ def get_custom_widgets(request, renderer=u'default'):
         renderer = request.get('form.renderer')
     adapter = getAdapter(None, ICollectionMultiViewRenderer, renderer)
     return getattr(adapter, 'custom_widgets', {})
-        
+
+
 class AddForm(base.AddForm):
 
     @property
@@ -123,16 +129,15 @@ class AddForm(base.AddForm):
         return fields
 
     label = _(u'Add CollectionMultiView portlet')
-    description = _(u"This portlet display a listing of items from a" + 
+    description = _(u"This portlet display a listing of items from a" +
                         " Collection, using custom views")
 
     def create(self, data):
         return Assignment(**data)
 
 
-
 class ExtendedDataAdapter(object):
-    """ 
+    """
         hack to lie to form.applyChanges that this object have
         all attributes
     """
@@ -152,6 +157,7 @@ class ExtendedDataAdapter(object):
         else:
             return super(ExtendedDataAdapter, self).__getattr__(key)
 
+
 class EditForm(base.EditForm):
 
     @property
@@ -160,7 +166,9 @@ class EditForm(base.EditForm):
         fields = form.Fields(schema)
         fields['target_collection'].custom_widget = UberSelectionWidget
         fields['renderer'].custom_widget = RendererSelectWidget
-        custom_widgets = get_custom_widgets(self.request, self.context.renderer)
+        custom_widgets = get_custom_widgets(
+            self.request,
+            self.context.renderer)
         for field, widget in custom_widgets.items():
             fields[field].custom_widget = widget
         if getattr(self, 'adapters', None) is not None:
