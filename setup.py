@@ -28,6 +28,7 @@ setup(name='collective.portlet.collectionmultiview',
           'plone.portlet.collection>=2.0',
       ],
       entry_points="""
-      # -*- Entry points: -*-
+      [z3c.autoinclude.plugin]
+      target = plone
       """,
       )
