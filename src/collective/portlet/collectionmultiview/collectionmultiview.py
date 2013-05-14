@@ -129,7 +129,7 @@ class AddForm(base.AddForm):
         return fields
 
     label = _(u'Add CollectionMultiView portlet')
-    description = _(u"This portlet display a listing of items from a" +
+    description = _(u"This portlet displays a listing of items from a" +
                         " Collection, using custom views")
 
     def create(self, data):
@@ -176,5 +176,5 @@ class EditForm(base.EditForm):
         return fields
 
     label = _(u'Edit CollectionMultiView portlet')
-    description = _(u"This portlet display a listing of items from a" +
+    description = _(u"This portlet displays a listing of items from a" +
                         " Collection, using custom views")
