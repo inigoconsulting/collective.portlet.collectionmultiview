@@ -26,7 +26,7 @@
         <a href="#"
            class="tile"
            tal:attributes="href itemUrl;
-                           title obj/Description">
+                           title python: obj.Description.decode('utf-8')">
             <img tal:replace="structure item_icon/html_tag" />
             <span tal:replace="obj/pretty_title_or_id">
              Title

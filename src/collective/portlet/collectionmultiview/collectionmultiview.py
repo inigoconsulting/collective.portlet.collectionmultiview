@@ -39,13 +39,17 @@ class ICollectionMultiView(IPortletDataProvider):
                       u"portlet. Leave this blank to show all items."),
         required=False)
 
-    renderer = schema.Choice(
-        title=_(u'Renderer'),
+    random = schema.Bool(
+        title=_(u"Select random items"),
+        description=_(u"If enabled, items will be selected randomly from the "
+                      u"collection, rather than based on its sort order."),
+        default=False)
+
+    renderer = schema.Choice(title=_(u'Renderer'),
         description=_(u"The name of the Renderer for this portlet."),
         default='default',
         required=True,
         vocabulary='collective.portlet.collectionmultiview.RendererVocabulary')
-
 
 class Assignment(base.Assignment):
 
@@ -54,10 +58,12 @@ class Assignment(base.Assignment):
     header = u""
     target_collection = None
     limit = None
+    random = False
 
     def __init__(self, header=u"", target_collection=None, limit=None,
-                 renderer='default', **kwargs):
+                 random=False, renderer='default', **kwargs):
         self.header = header
+        self.random = random
         self.target_collection = target_collection
         self.limit = limit
         self.renderer = renderer
@@ -75,18 +81,25 @@ class Assignment(base.Assignment):
 class Renderer(collection.Renderer):
     implements(ICollectionMultiViewBaseRenderer)
 
+    def get_renderer(self):
+        renderer = getattr(self.data,'renderer',None)
+        if renderer is None:
+           self.data.renderer = 'default'
+           renderer = 'default'
+        return getAdapter(self, ICollectionMultiViewRenderer, renderer)
+
     @property
     def render(self):
         """
             Find the renderer object of the selected renderer, and let it
             masquerade as the actual portlet renderer
         """
-        renderer = getattr(self.data, 'renderer', None)
-        if renderer is None:
-            self.data.renderer = 'default'
-            renderer = 'default'
-        return getAdapter(self, ICollectionMultiViewRenderer, renderer).render
+        return self.get_renderer().render
 
+    @property
+    def available(self):
+        renderer = self.get_renderer()
+        return getattr(renderer, 'available', True)
 
 def get_extended_schema(request, renderer=u'default'):
     """

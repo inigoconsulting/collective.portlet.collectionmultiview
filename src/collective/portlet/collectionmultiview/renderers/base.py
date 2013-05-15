@@ -6,6 +6,16 @@ from zope.interface import implements
 from Acquisition import aq_inner
 
 
+class DataProvider(object):
+
+    def __init__(self, data, schema):
+        self._data = data
+        self._schema = schema
+
+    def __getattr__(self, key):
+        # FIXME: check against the schema
+        return getattr(self._data, key, None)
+
 class CollectionMultiViewBaseRenderer(object):
 #    adapts(ICollectionMultiViewBaseRenderer)
     """
@@ -21,8 +31,11 @@ class CollectionMultiViewBaseRenderer(object):
             return
 
         self.request = base.request
-        self.context = aq_inner(base.context)
-        self.data = base.data
+        self.context = aq_inner(base.context)  
+        if getattr(self, 'schema', None):
+            self.data = DataProvider(base.data, self.schema)
+        else:
+            self.data = base.data
         self.results = base.results
         self.collection_url = base.collection_url
         self.collection = base.collection

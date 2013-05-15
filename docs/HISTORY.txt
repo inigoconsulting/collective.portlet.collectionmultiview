@@ -10,6 +10,42 @@ Changelog
 - Add Plone entry point in setup.py
   [fredvd]
 
+2.1.5 (2013-01-24)
+------------------
+
+- returning None on attribute not found introduced a major bug when editing,
+  fixed it by moving this as an adapter in renderer [kagesenshi]
+
+
+2.1.4 (2013-01-24)
+------------------
+
+- return None if attribute not found on Assignment to avoid crashy behavior
+  when new fields are introduced by schema extender [kagesenshi]
+
+
+2.1.3 (2013-01-03)
+------------------
+
+- 'random' field should be in primary schema rather than on default 
+   renderer schema [kagesenshi]
+
+
+2.1.2 (2013-01-02)
+------------------
+
+- Add 'available' property to portlet renderer [kagesenshi]
+
+
+2.1.1 (2012-12-06)
+------------------
+
+- Fix unicode decode error for unicode chars in href title for default
+  renderer [kaerumy]. 
+
+  Supported by: Centre for Internet Society, India 
+
+
 2.1.0 (2012-11-06)
 ------------------
 
